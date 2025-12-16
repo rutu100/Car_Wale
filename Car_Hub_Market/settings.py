@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-2gpsuv(j=j5371$l&-9l+_v8mws+ef(mx+++_pzi)yw4pwp*cd
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://car-hub-market.onrender.com', 'https://*.127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://car-hub-market.onrender.com', 'https://127.0.0.1']
 
 # Application definition
 
@@ -128,15 +128,20 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+STATIC_ROOT = BASE_DIR / "staticfiles"   
+
 
 # configuring media files
 # Base url to serve media files
 MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'   
 
-# Path where media is stored
-# MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+

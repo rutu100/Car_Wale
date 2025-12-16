@@ -1,0 +1,80 @@
+{% load static %}
+
+<footer class="bg-light text-center text-lg-start border-top mt-5">
+
+  <div class="container p-4">
+    <div class="row">
+
+      <!-- About -->
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h5 class="text-uppercase fw-bold text-black">Car Hub Showroom</h5>
+        <p class="text-muted">
+          We offer a wide range of new cars at the best price with excellent customer support.
+        </p>
+
+        <div class="mt-2">
+          <img src="{% static 'images/facebook.png' %}" alt="Facebook" width="35"
+               class="me-2 rounded-circle bg-white shadow-sm p-1">
+          <img src="{% static 'images/instagram.png' %}" alt="Instagram" width="35"
+               class="me-2 rounded-circle bg-white shadow-sm p-1">
+          <img src="{% static 'images/whatsapp.png' %}" alt="WhatsApp" width="35"
+               class="me-2 rounded-circle bg-white shadow-sm p-1">
+          <img src="{% static 'images/youtube.png' %}" alt="YouTube" width="35"
+               class="me-2 rounded-circle bg-white shadow-sm p-1">
+          <img src="{% static 'images/linkedin.png' %}" alt="LinkedIn" width="35"
+               class="rounded-circle bg-white shadow-sm p-1">
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h5 class="text-uppercase fw-bold text-black">Quick Links</h5>
+        <ul class="list-unstyled mb-1">
+          <li>
+            <a href="{% url 'home' %}" class="text-dark text-decoration-none footer-link">
+              Home
+            </a>
+          </li>
+          {% comment %}
+          <li>
+            <a href="{% url 'cars' %}" class="text-dark text-decoration-none footer-link">
+              Cars
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'contact' %}" class="text-dark text-decoration-none footer-link">
+              Contact
+            </a>
+          </li>
+          {% endcomment %}
+          <li>
+            <a href="#" class="text-dark text-decoration-none footer-link">
+              Terms & Conditions
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="col-lg-4 col-md-12 mb-4">
+        <h5 class="text-uppercase fw-bold text-black">Contact Us</h5>
+        <p>
+          Email:
+          <a href="mailto:support@carhub.com" class="text-decoration-none text-dark">
+            support@carhub.com
+          </a>
+        </p>
+        <p>Phone: +91 77091 76186</p>
+        <p>Location: Baramati, Pune, Maharashtra</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="text-center p-3 text-white small"
+       style="background: linear-gradient(90deg, #90e4ed, #6610f2);">
+    © {% now "Y" %} Car Hub. All rights reserved.
+  </div>
+
+</footer>

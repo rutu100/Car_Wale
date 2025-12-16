@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Car Hub Market{% endblock %}
+
+{% block content %}
+
+<!-- ================= HERO IMAGE ================= -->
+<div class="container">
+    <div class="d-flex justify-content-center my-4 hero-car">
+        <img src="{% static 'images/homeCar.png' %}"
+             class="img-fluid"
+             alt="Car Hub">
+    </div>
+</div>
+
+<!-- ================= SECTION TITLE ================= -->
+<h5 class="text-center mt-4 fw-bold">Get Offers on Popular Cars</h5>
+
+<!-- ================= CAROUSEL ================= -->
+<div class="carousel-container my-4">
+
+    <!-- Left Arrow -->
+    <button class="carousel-nav left" onclick="scrollCarousel(-1)">&#8249;</button>
+
+    <!-- Track -->
+    <div class="carousel-track" id="carCarousel">
+
+        <!-- Card 1 -->
+        <a href="#" class="text-decoration-none text-dark">
+            <div class="carousel-card">
+                <img src="{% static 'images/Tata_Punch.webp' %}" alt="Tata Punch">
+                <h6>Tata Punch</h6>
+                <div class="price">Rs. 6.20 - 12.52 Lakh</div>
+                <span class="link">Check On Road Price</span>
+            </div>
+        </a>
+
+        <!-- Card 2 -->
+        <a href="#" class="text-decoration-none text-dark">
+            <div class="carousel-card">
+                <img src="{% static 'images/curvv.avif' %}" alt="Tata Curvv">
+                <h6>Tata Curvv</h6>
+                <div class="price">Rs. 10.00 - 19.52 Lakh</div>
+                <span class="link">Check On Road Price</span>
+            </div>
+        </a>
+
+        <!-- Card 3 -->
+        <a href="#" class="text-decoration-none text-dark">
+            <div class="carousel-card">
+                <img src="{% static 'images/nexon-ev.avif' %}" alt="Tata Nexon EV">
+                <h6>Tata Nexon EV</h6>
+                <div class="price">Rs. 12.49 - 17.19 Lakh</div>
+                <span class="link">Check On Road Price</span>
+            </div>
+        </a>
+
+        <!-- Card 4 -->
+        <a href="#" class="text-decoration-none text-dark">
+            <div class="carousel-card">
+                <img src="{% static 'images/Harrier.avif' %}" alt="Tata Harrier">
+                <h6>Tata Harrier</h6>
+                <div class="price">Rs. 15.00 - 26.69 Lakh</div>
+                <span class="link">Check On Road Price</span>
+            </div>
+        </a>
+
+        <!-- Card 5 -->
+        <a href="#" class="text-decoration-none text-dark">
+            <div class="carousel-card">
+                <img src="{% static 'images/safari.avif' %}" alt="Tata Safari">
+                <h6>Tata Safari</h6>
+                <div class="price">Rs. 15.50 - 27.44 Lakh</div>
+                <span class="link">Check On Road Price</span>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- Right Arrow -->
+    <button class="carousel-nav right" onclick="scrollCarousel(1)">&#8250;</button>
+</div>
+
+<!-- ================= CSS ================= -->
+<style>
+/* Hero image */
+.hero-car img {
+    max-width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    animation: fadeUp 0.8s ease-in-out;
+}
+
+/* Carousel container */
+.carousel-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 10px 40px;
+}
+
+/* Track */
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+/* Cards */
+.carousel-card {
+    min-width: 220px;
+    background: #fff;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carousel-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.carousel-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.2);
+}
+
+/* Price & link */
+.price {
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+.link {
+    font-size: 14px;
+    color: #6610f2;
+}
+
+/* Navigation arrows */
+.carousel-nav {
+    position: absolute;
+    background: white;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.carousel-nav.left { left: 5px; }
+.carousel-nav.right { right: 5px; }
+
+/* Animation */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<!-- ================= JS ================= -->
+<script>
+function scrollCarousel(direction) {
+    const carousel = document.getElementById("carCarousel");
+    const scrollAmount = 260;
+    carousel.scrollBy({
+        left: direction * scrollAmount,
+        behavior: "smooth"
+    });
+}
+</script>
+
+{% endblock %}

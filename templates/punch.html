@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tata Punch | Car Hub{% endblock %}
+
+{% block content %}
+
+<!-- ================= Tata Punch Section ================= -->
+<section class="py-5 pb-0 bg-light">
+  <div class="container" style="max-width:900px;">
+
+    <!-- Title & Ratings -->
+    <div class="d-flex flex-wrap align-items-center mb-2">
+      <h2 class="fw-bold mb-0 me-3">Tata Punch</h2>
+      <span class="badge bg-success me-2">
+        <i class="bi bi-star-fill"></i> 3.7 Expert Rating
+      </span>
+      <span class="badge bg-primary">
+        <i class="bi bi-star-fill"></i> 4.4 User Rating
+      </span>
+    </div>
+
+    <!-- Description -->
+    <p class="text-muted mb-4">
+      Tata Punch is a compact SUV with rugged styling, five-star safety rating,
+      petrol and CNG options, and excellent practicality for city driving.
+    </p>
+
+    <!-- Car Card -->
+    <div class="card shadow border border-primary rounded-3 overflow-hidden mb-4">
+      <div class="row g-0 align-items-center">
+
+        <!-- Image -->
+        <div class="col-md-4 position-relative">
+          <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2">
+            Best Seller
+          </span>
+          <img src="{% static 'images/Tata_Punch.webp' %}"
+               class="img-fluid h-100 rounded-start"
+               alt="Tata Punch">
+        </div>
+
+        <!-- Details -->
+        <div class="col-md-8">
+          <div class="card-body p-4">
+
+            <p class="text-secondary small mb-3">
+              Variant: <strong>Creative Plus (S)</strong> | City: <strong>Pune</strong>
+            </p>
+
+            <p class="mb-1">
+              <span class="fw-bold text-primary fs-4">₹ 12.38 Lakh</span>
+              <small class="text-muted">(On-road, Pune)</small>
+            </p>
+
+            <p class="small text-success mb-4">
+              EMI from ₹19,734/month
+            </p>
+
+            <!-- Features -->
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              <span class="badge bg-light text-dark border">
+                <i class="bi bi-fuel-pump me-1"></i> Petrol / CNG
+              </span>
+              <span class="badge bg-light text-dark border">
+                <i class="bi bi-gear-fill me-1"></i> Manual & AMT
+              </span>
+              <span class="badge bg-light text-dark border">
+                <i class="bi bi-speedometer2 me-1"></i> 18.97 km/l
+              </span>
+              <span class="badge bg-light text-dark border">
+                <i class="bi bi-star-fill text-warning me-1"></i> 5-Star Safety
+              </span>
+            </div>
+
+            <!-- Buttons -->
+            <a href="https://www.carwale.com/tata-cars/punch/"
+               target="_blank"
+               class="btn btn-primary me-2">
+              View Details
+            </a>
+            <a href="#" class="btn btn-outline-success">
+              Get EMI Offers
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Mileage Section ================= -->
+<section class="py-4 bg-light">
+  <div class="container" style="max-width:900px;">
+    <h4 class="fw-bold mb-2">Tata Punch Mileage</h4>
+    <p class="text-muted">
+      Claimed mileage ranges from <strong>16.75 to 17.2 kmpl</strong>.
+    </p>
+
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Powertrain</th>
+            <th>User Reported Mileage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Petrol - Manual</td>
+            <td>17.2 kmpl</td>
+          </tr>
+          <tr>
+            <td>CNG - Manual</td>
+            <td>17.56 km/kg</td>
+          </tr>
+          <tr>
+            <td>Petrol - AMT</td>
+            <td>16.75 kmpl</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Images Section ================= -->
+<section class="py-5 bg-light">
+  <div class="container" style="max-width:900px;">
+    <h4 class="fw-bold mb-4">Punch Images</h4>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <img src="{% static 'images/punch1.avif' %}" class="img-fluid rounded shadow-sm hover-zoom">
+      </div>
+      <div class="col-md-6">
+        <img src="{% static 'images/punch2.avif' %}" class="img-fluid rounded shadow-sm hover-zoom">
+      </div>
+      <div class="col-6 col-md-3">
+        <img src="{% static 'images/punch3.avif' %}" class="img-fluid rounded shadow-sm hover-zoom">
+      </div>
+      <div class="col-6 col-md-3">
+        <img src="{% static 'images/punch4.avif' %}" class="img-fluid rounded shadow-sm hover-zoom">
+      </div>
+      <div class="col-6 col-md-3">
+        <img src="{% static 'images/punch5.avif' %}" class="img-fluid rounded shadow-sm hover-zoom">
+      </div>
+      <div class="col-6 col-md-3">
+        <img src="{% static 'images/punch6.avif' %}" class="img-fluid rounded shadow-sm hover-zoom">
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

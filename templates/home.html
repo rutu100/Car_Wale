@@ -1,167 +1,75 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}
-{% if brandName %}
-{{brandName}}
-{% else %}
-Car Hub Market
-{% endif %}
-
-{% endblock %}
+{% block title %}Car Hub Market{% endblock %}
 
 {% block content %}
 
+<!-- HERO IMAGE -->
 <div class="container">
-    <div>
-        {% if messages %}
-        {% for message in messages %}
-        <div style="width: 50%; margin: auto;" class="alert alert-danger alert-{{message.tags}} text-center"
-            role="alert">
-            {{message}}
-        </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-
-    <div class="d-flex justify-content-center flex-wrap pt-3 align-items-center mb-3">
-        <div class="col-6">
-            <h1 class="h2 text-center">Welcome To Car Hub Market</h1>
-            <p>
-                Discover a world of automotive excellence at Car Hub Market, your one-stop destination for premium cars.
-                Explore a curated collection of top-notch brands and find the perfect vehicle that matches your style
-                and
-                preferences.
-            <p>
-                Whether you're in search of luxury, performance, or reliability, our extensive inventory has something
-                for everyone.
-                Our commitment to quality and customer satisfaction ensures a seamless car-buying experience. Start your
-                journey
-                with Car Hub Market today!
-            </p>
-            </p>
-        </div>
-        <div class="col-6">
-            <img src="{% static 'header.jpg' %}" class="img-fluid" alt="">
-        </div>
-    </div>
-</div>
-<!-- 
-<div class="container">
-    <div class="p-3">
-        <h5>All Categories</h5>
-        <div class="btn-group">
-            <input class="form-check-input" type="radio" name="category" id="all" />
-            <label class="form-check-label" for="all">
-                <a href="{% url 'home' %}" class="text-decoration-none text-dark">All Categories</a>
-            </label>
-        </div>
-        {% for brand in brands %}
-        <div class="btn-group">
-            <input href="{% url 'brands_filter' brand.name %}" class="form-check-input" type="radio" name="brand" id="{{brand.id}}" />
-            <label class="form-check-label" for="{{brandid}}">
-                <a href="{% url 'brands_filter' brand.name %}" class="text-decoration-none text-dark">{{brand.name}}</a>
-            </label>
-        </div>
-        {% endfor %}
-</div> -->
-
-
-<div class="container">
-    <h2 class="text-center">Brand Filter</h2>
-    <div class="btn-group d-flex justify-content-center">
-        <a class="btn btn-primary text-decoration-none" href="{% url 'home' %}">All Brands</a>
-        {% for brand in brands %}
-        <a class="btn btn-primary text-decoration-none" href="{% url 'brands_filter' brand.name %}">{{ brand.name }}</a>
-        {% endfor %}
+    <div class="d-flex justify-content-center my-4 hero-car">
+        <img src="{% static 'images/homeCar.png' %}" class="img-fluid" alt="Car Hub">
     </div>
 </div>
 
-<!-- <div class="container text-center mt-3">
-    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-        {% for brand in brands %}
-        <input type="radio" class="btn-check" name="btnradio" id="{{ brand.id }}" autocomplete="off" checked>
-        <label class="btn btn-outline-primary" for="{{ brand.id }}">{{ brand.name }}</label>
-        {% endfor %}
-    </div>
-</div> -->
+<!-- SECTION TITLE -->
+<h5 class="text-center mt-4 fw-bold">Get Offers on Popular Cars</h5>
 
-<div class="container">
-    <div class="row">
-        <!-- Left side: Brand filter -->
+<!-- CAROUSEL -->
+<div class="carousel-container my-4">
 
-        <!-- <div class="col-md-3">
-            <h2 class="text-center">Brand Filter</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><a class="text-decoration-none" href="{% url 'home' %}">All Brands</a></li>
-                {% for brand in brands %}
-                <li class="list-group-item"><a class="text-decoration-none"
-                        href="{% url 'brands_filter' brand.name %}">{{ brand.name }}</a></li>
-                {% endfor %}
-            </ul>
-        </div> -->
+    <button class="carousel-nav left" onclick="scrollCarousel(-1)">&#8249;</button>
 
-        <!-- Right side: Brand-wise cars -->
-        <div class="col-md-12">
-            {% if cars.exists %}
-            {% if cars|length > 1 %}
-            <h2 class="text-center">{{ cars|length }} Cars Found</h2>
-            {% else %}
-            <h2 class="text-center">{{ cars|length }} Car Found</h2>
-            {% endif %}
-            {% else %}
-            <h2 class="text-center">No Cars Found</h2>
-            {% endif %}
+    <div class="carousel-track" id="carCarousel">
 
-            <div class="row justify-content-center">
-                {% for car in cars %}
-                <div class="col-md-3 mb-3">
-                    <div class="card">
-                        {% if car.image %}
-                        <img style="height: 200px; object-fit: cover;" src="{{ car.image.url }}" class="card-img-top"
-                            alt="{{ car.name }}">
-                        {% else %}
-                        <!-- <p>No Image Available</p> -->
-                        <img style="height: 200px; object-fit: cover;" class="card-img-top"
-                            alt="No Image Available"></img>
-                        {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title"><a class="text-decoration-none"
-                                    href="{% url 'car_detail' car.id %}">{{ car.name }}</a>
-                            </h5>
-                            <p style="height: 100px;" class="card-text">{{ car.description|truncatewords:15 }}</p>
-                            <p class="card-text">Price: ${{ car.price }}</p>
-                            <p class="card-text">Brand: {{ car.brand.name }}</p>
-                            <div class="text-center">
-                                <a href="{% url 'car_detail' car.id %}" class="btn btn-primary">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+        <a href="#" class="text-decoration-none text-dark">
+            <div class="carousel-card">
+                <img src="{% static 'images/Tata_Punch.webp' %}">
+                <h6>Tata Punch</h6>
+                <div class="price">Rs. 6.20 - 12.52 Lakh</div>
+                <span class="link">Check On Road Price</span>
             </div>
-        </div>
+        </a>
+
+        <a href="#" class="text-decoration-none text-dark">
+            <div class="carousel-card">
+                <img src="{% static 'images/curvv.avif' %}">
+                <h6>Tata Curvv</h6>
+                <div class="price">Rs. 10.00 - 19.52 Lakh</div>
+                <span class="link">Check On Road Price</span>
+            </div>
+        </a>
+
+        <a href="#" class="text-decoration-none text-dark">
+            <div class="carousel-card">
+                <img src="{% static 'images/nexon-ev.avif' %}">
+                <h6>Tata Nexon EV</h6>
+                <div class="price">Rs. 12.49 - 17.19 Lakh</div>
+                <span class="link">Check On Road Price</span>
+            </div>
+        </a>
+
+        <a href="#" class="text-decoration-none text-dark">
+            <div class="carousel-card">
+                <img src="{% static 'images/Harrier.avif' %}">
+                <h6>Tata Harrier</h6>
+                <div class="price">Rs. 15.00 - 26.69 Lakh</div>
+                <span class="link">Check On Road Price</span>
+            </div>
+        </a>
+
+        <a href="#" class="text-decoration-none text-dark">
+            <div class="carousel-card">
+                <img src="{% static 'images/safari.avif' %}">
+                <h6>Tata Safari</h6>
+                <div class="price">Rs. 15.50 - 27.44 Lakh</div>
+                <span class="link">Check On Road Price</span>
+            </div>
+        </a>
+
     </div>
+
+    <button class="carousel-nav right" onclick="scrollCarousel(1)">&#8250;</button>
 </div>
-
-
-<script>
-    // Get the container element
-    var btnContainer = document.querySelector(".btn-group");
-
-    // Get all buttons with class="btn" inside the container
-    var btns = btnContainer.getElementsByClassName("btn");
-
-    // Loop through the buttons and add the active class to the current/clicked button
-    for (var i = 0; i < btns.length; i++) {
-        btns[i].addEventListener("click", function () {
-            var current = document.querySelector(".btn.active");
-            if (current) {
-                current.classList.remove("active");
-            }
-            this.classList.add("active");
-        });
-    }
-</script>
 
 {% endblock %}
