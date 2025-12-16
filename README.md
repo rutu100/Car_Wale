@@ -11,7 +11,7 @@ This Django project is a Car Dealership Management System. It allows users to ad
 - Comment System: Users can leave comments on specific cars.
 
 ## Getting Started
-1. Clone the repository: `git clone https://github.com/Nirob-Barman/Software-Development-Project.git`
+1. Clone the repository: `git clone https://github.com/rutu100/Car_Wale`
 2. Navigate to the project directory: `cd Car_Hub_Market`
 3. Install dependencies: `pip install -r requirements.txt`
 4. Run migrations: `python manage.py migrate`
