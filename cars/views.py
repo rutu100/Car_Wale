@@ -9,6 +9,10 @@ from .forms import CarForm, CommentForm
 # ================= ADD CAR =================
 @login_required
 def add_cars(request):
+    if not request.user.is_superuser:
+        messages.error(request, "Only admin can add cars.")
+        return redirect('home')
+
     if request.method == 'POST':
         form = CarForm(request.POST, request.FILES)
         if form.is_valid():
@@ -64,3 +68,43 @@ def car_detail(request, car_id):
         'comments': comments,
         'comment_form': comment_form
     })
+
+
+# ================= EDIT CAR =================
+@login_required
+def edit_car(request, car_id):
+    car = get_object_or_404(Car, id=car_id)
+
+    if not (request.user == car.author or request.user.is_superuser):
+        messages.error(request, "You are not allowed to edit this car.")
+        return redirect('car_detail', car_id=car.id)
+
+    if request.method == 'POST':
+        form = CarForm(request.POST, request.FILES, instance=car)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Car updated successfully!")
+            return redirect('car_detail', car_id=car.id)
+    else:
+        form = CarForm(instance=car)
+
+    return render(request, 'form.html', {
+        'form': form,
+        'title': 'Edit Car',
+        'button_text': 'Update Car',
+        'button_class': 'btn-warning'
+    })
+
+
+# ================= DELETE CAR =================
+@login_required
+def delete_car(request, car_id):
+    car = get_object_or_404(Car, id=car_id)
+
+    if not (request.user == car.author or request.user.is_superuser):
+        messages.error(request, "You are not allowed to delete this car.")
+        return redirect('car_detail', car_id=car.id)
+
+    car.delete()
+    messages.success(request, "Car deleted successfully!")
+    return redirect('home')

@@ -17,29 +17,34 @@
     <!-- Navbar Content -->
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 
-      <!-- Left Menu -->
+      <!-- LEFT MENU -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link active" href="{% url 'home' %}">Home</a>
         </li>
 
-        {% if user.is_authenticated %}
+        <!-- Admin only -->
+        {% if user.is_superuser %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'add_cars' %}">Add Car</a>
+          <a class="nav-link text-primary fw-semibold" href="{% url 'add_cars' %}">
+            <i class="bi bi-plus-circle"></i> Add Car
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'add_brands' %}">Add Brands</a>
+          <a class="nav-link text-primary fw-semibold" href="{% url 'add_brands' %}">
+            <i class="bi bi-tags"></i> Add Brands
+          </a>
         </li>
         {% endif %}
       </ul>
 
-      <!-- Right Menu -->
+      <!-- RIGHT MENU -->
       <div class="d-flex align-items-center ms-auto gap-3">
 
-        <!-- Search Box (UI ready, backend later) -->
+        <!-- Search (UI only for now) -->
         <form class="d-flex position-relative">
           <input class="form-control ps-5 rounded-pill search-input"
-                 type="search" placeholder="Search">
+                 type="search" placeholder="Search cars...">
           <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary">
             <i class="bi bi-search"></i>
           </span>
@@ -54,6 +59,14 @@
           </button>
 
           <ul class="dropdown-menu dropdown-menu-end shadow">
+            <li class="dropdown-header text-center fw-bold">
+              {{ user.username }}
+              {% if user.is_superuser %}
+              <span class="badge bg-danger ms-1">Admin</span>
+              {% endif %}
+            </li>
+            <li><hr class="dropdown-divider"></li>
+
             <li>
               <a class="dropdown-item" href="{% url 'profile' %}">
                 <i class="bi bi-person me-2"></i> Profile
@@ -73,8 +86,12 @@
           </ul>
         </div>
         {% else %}
+        <!-- Login / Signup -->
         <a href="{% url 'login' %}" class="btn btn-outline-primary rounded-pill">
           Login
+        </a>
+        <a href="{% url 'signup' %}" class="btn btn-primary rounded-pill">
+          Sign Up
         </a>
         {% endif %}
 

@@ -22,50 +22,27 @@
 
     <div class="carousel-track" id="carCarousel">
 
-        <a href="#" class="text-decoration-none text-dark">
+        {% for car in cars %}
+        <a href="{% url 'car_detail' car.id %}" class="text-decoration-none text-dark">
             <div class="carousel-card">
-                <img src="{% static 'images/Tata_Punch.webp' %}">
-                <h6>Tata Punch</h6>
-                <div class="price">Rs. 6.20 - 12.52 Lakh</div>
-                <span class="link">Check On Road Price</span>
-            </div>
-        </a>
 
-        <a href="#" class="text-decoration-none text-dark">
-            <div class="carousel-card">
-                <img src="{% static 'images/curvv.avif' %}">
-                <h6>Tata Curvv</h6>
-                <div class="price">Rs. 10.00 - 19.52 Lakh</div>
-                <span class="link">Check On Road Price</span>
-            </div>
-        </a>
+                {% if car.image %}
+                    <img src="{{ car.image.url }}" alt="{{ car.name }}">
+                {% else %}
+                    <img src="{% static 'images/no-car.png' %}" alt="No Image">
+                {% endif %}
 
-        <a href="#" class="text-decoration-none text-dark">
-            <div class="carousel-card">
-                <img src="{% static 'images/nexon-ev.avif' %}">
-                <h6>Tata Nexon EV</h6>
-                <div class="price">Rs. 12.49 - 17.19 Lakh</div>
+                <h6>{{ car.name }}</h6>
+                <div class="price">₹ {{ car.price }}</div>
                 <span class="link">Check On Road Price</span>
-            </div>
-        </a>
 
-        <a href="#" class="text-decoration-none text-dark">
-            <div class="carousel-card">
-                <img src="{% static 'images/Harrier.avif' %}">
-                <h6>Tata Harrier</h6>
-                <div class="price">Rs. 15.00 - 26.69 Lakh</div>
-                <span class="link">Check On Road Price</span>
             </div>
         </a>
-
-        <a href="#" class="text-decoration-none text-dark">
-            <div class="carousel-card">
-                <img src="{% static 'images/safari.avif' %}">
-                <h6>Tata Safari</h6>
-                <div class="price">Rs. 15.50 - 27.44 Lakh</div>
-                <span class="link">Check On Road Price</span>
-            </div>
-        </a>
+        {% empty %}
+        <p class="text-muted text-center w-100">
+            No cars available right now
+        </p>
+        {% endfor %}
 
     </div>
 
