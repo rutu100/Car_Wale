@@ -1,53 +1,93 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% load crispy_forms_tags %}
 
-{% block title %}{{title}}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
+<div class="container mt-5 mb-5">
 
-<form style="width: 50%; margin: auto;" action="" method="POST" novalidate>
-    {% if button_text == "Change Password" and title == "Change Your Password" %}
-    <h1 class="text-center">Change Your Password</h1>
-    {% elif button_text == "Change Password" and title == "Change Your Password without Old Password" %}
-    <h3 class="text-center">Change Your Password without Old Password</h3>
-    {% else %}
-    <h1 class="text-center">{{title}} Page</h1>
-    {% endif %}
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
 
-    <div>
-        {% if messages %}
-        {% for message in messages %}
-        <div style="width: 50%; margin: auto;" class="alert alert-danger alert-{{message.tags}} text-center" role="alert">
-            {{message}}
+      <!-- Card -->
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+        <!-- Header -->
+        <div class="bg-primary text-white text-center py-4">
+          {% if button_text == "Change Password" and title == "Change Your Password" %}
+            <h4 class="mb-0">🔐 Change Your Password</h4>
+          {% elif button_text == "Change Password" and title == "Change Your Password without Old Password" %}
+            <h4 class="mb-0">🔑 Reset Password</h4>
+          {% else %}
+            <h4 class="mb-0">{{ title }}</h4>
+          {% endif %}
         </div>
-        {% endfor %}
-        {% endif %}
+
+        <!-- Body -->
+        <div class="card-body p-4">
+
+          <!-- Messages -->
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} text-center">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <!-- Form -->
+          <form method="POST" novalidate>
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="mb-3">
+              <label class="form-label fw-semibold">
+                {{ field.label }}
+              </label>
+
+              {{ field }}
+
+              {% if field.errors %}
+              <div class="text-danger small mt-1">
+                {{ field.errors|striptags }}
+              </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+
+            <!-- Gradient Button -->
+            <div class="d-grid mt-4">
+              <button type="submit"
+                      class="btn btn-lg rounded-pill gradient-btn">
+                {{ button_text }}
+              </button>
+            </div>
+          </form>
+
+          <!-- Auth Links -->
+          {% if button_text == "Login" %}
+            <p class="text-center mt-4">
+              Don’t have an account?
+              <a href="{% url 'signup' %}" class="fw-bold text-decoration-none">
+                Sign Up
+              </a>
+            </p>
+          {% elif button_text == "Sign Up" %}
+            <p class="text-center mt-4">
+              Already have an account?
+              <a href="{% url 'login' %}" class="fw-bold text-decoration-none">
+                Login
+              </a>
+            </p>
+          {% endif %}
+
+        </div>
+      </div>
+
     </div>
+  </div>
 
-    {% csrf_token %}
-    <!-- {{form|crispy}} -->
-
-    <!-- {% for field in form %}
-    <div class="form-group">
-        {{field|as_crispy_field}}
-    </div>
-    {% endfor %} -->
-
-    {% for field in form %}
-    <div class="form-group">
-        {{field.label_tag}}
-        {{field}}
-        {{field.errors|striptags}}
-    </div>
-    {% endfor %}
-
-    <input class="btn {{button_class}} mt-2" type="submit" value="{{button_text}}">
-
-    {% if button_text == "Login" %}
-    <p class="text-center">Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
-    {% elif button_text == "Sign Up" %}
-    <p class="text-center">Already have an account? <a href="{% url 'login' %}">Login</a></p>
-    {% endif %}
-</form>
-
+</div>
 {% endblock %}
