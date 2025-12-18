@@ -1,23 +1,60 @@
 from django.contrib import admin
-from . import models
+from .models import Car, Comment, Wishlist, Rating
 
-# Register your models here.
-admin.site.register(models.Car)
-admin.site.register(models.Comment)
+# =========================
+# CAR ADMIN
+# =========================
+@admin.register(Car)
+class CarAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'brand',
+        'price',
+        'quantity',
+        'fuel_type',
+        'transmission',
+        'mileage',
+        'seating'
+    )
+
+    list_filter = (
+        'brand',
+        'fuel_type',
+        'transmission'
+    )
+
+    search_fields = (
+        'name',
+        'brand__name'
+    )
 
 
-# from django.contrib import admin
-# from .models import Car, Comment
+# =========================
+# COMMENT ADMIN
+# =========================
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'car', 'created_on')
+    search_fields = ('name', 'car__name')
 
 
-# class CarAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'brand', 'price', 'quantity', 'display_buyers')
+# =========================
+# WISHLIST ADMIN
+# =========================
+@admin.register(Wishlist)
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ('user', 'car', 'added_on')
 
-#     def display_buyers(self, obj):
-#         return ", ".join([buyer.username for buyer in obj.buyers.all()])
+# =========================
+# RATING ADMIN
 
-#     display_buyers.short_description = 'Buyers'
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    list_display = ('user', 'car', 'rating', 'created_on')
+    list_filter = ('rating', 'created_on')
 
 
-# admin.site.register(Car, CarAdmin)
-# admin.site.register(Comment)
+
+
+
+

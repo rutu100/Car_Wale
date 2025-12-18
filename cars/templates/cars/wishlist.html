@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Wishlist | Car Hub{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pb-5">
+
+    <h3 class="fw-bold mt-4 text-center">
+        ❤️ My Wishlist
+    </h3>
+
+    <div class="row g-4">
+
+        {% for item in items %}
+        <div class="col-md-4">
+
+            <div class="card h-100 shadow-sm">
+
+                {% if item.car.image %}
+                <img src="{{ item.car.image.url }}"
+                     class="card-img-top"
+                     alt="{{ item.car.name }}">
+                {% else %}
+                <img src="{% static 'images/no-car.png' %}"
+                     class="card-img-top"
+                     alt="No Image">
+                {% endif %}
+
+                <div class="card-body text-center">
+                    <h6 class="fw-bold">
+                        {{ item.car.name }}
+                    </h6>
+
+                    <p class="text-success fw-semibold">
+                        ₹ {{ item.car.price }}
+                    </p>
+
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="{% url 'car_detail' item.car.id %}"
+                           class="btn btn-sm btn-outline-primary">
+                           View
+                        </a>
+
+                        <a href="{% url 'remove_from_wishlist' item.car.id %}"
+                           class="btn btn-sm btn-outline-danger">
+                           Remove
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="text-muted">
+                Your wishlist is empty ❤️
+            </p>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endblock %}

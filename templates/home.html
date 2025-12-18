@@ -1,52 +1,215 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Car Hub Market{% endblock %}
+{% block title %}Car Wale{% endblock %}
 
 {% block content %}
 
-<!-- HERO IMAGE -->
-<div class="container">
-    <div class="d-flex justify-content-center my-4 hero-car">
-        <img src="{% static 'images/homeCar.png' %}" class="img-fluid" alt="Car Hub">
+<!-- ================= HERO + FIND CAR ================= -->
+<div class="container py-5 text-center hero-section fade-in">
+
+    <div class="hero-img-wrapper slide-down">
+        <img src="{% static 'images/homeCar.png' %}"
+             class="img-fluid mb-4 hero-img">
     </div>
+
+    <h2 class="fw-bold hero-title">Find Your Right Car 🚗</h2>
+    <p class="text-muted hero-subtitle">
+        Best prices • Trusted dealers • Easy buying
+    </p>
+
+    <!-- ================= FILTER FORM ================= -->
+    <form method="get" id="filterForm"
+          class="card shadow-lg p-4 mt-4 mx-auto slide-up"
+          style="max-width:1000px;border-radius:22px;">
+
+        <div class="d-flex justify-content-between mb-3">
+            <h5 class="fw-bold mb-0">Find Your Right Car</h5>
+            <span class="text-muted"><i class="bi bi-geo-alt"></i> Pune</span>
+        </div>
+
+        <!-- 🔍 SEARCH WITH LIVE SUGGESTIONS -->
+        <div class="position-relative mb-3">
+            <div class="search-box">
+                <input type="text"
+                       name="search"
+                       id="searchInput"
+                       class="search-input"
+                       placeholder="Type car name (Eg. Nexon, Punch)">
+                <i class="bi bi-search search-icon"></i>
+            </div>
+
+            <ul class="list-group position-absolute w-100 d-none"
+                id="suggestionBox"
+                style="z-index:1000;"></ul>
+        </div>
+
+        <!-- FILTER CHIPS -->
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <button type="button" class="btn btn-light filter-chip">
+                <i class="bi bi-cash-stack"></i> Budget
+            </button>
+
+            <button type="button" class="btn btn-light filter-chip">
+                <i class="bi bi-fuel-pump"></i> Fuel
+            </button>
+
+            <button type="button" class="btn btn-light filter-chip">
+                <i class="bi bi-gear"></i> Transmission
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline-success filter-chip"
+                    data-bs-toggle="modal"
+                    data-bs-target="#filterModal">
+                <i class="bi bi-funnel"></i> All Filters
+            </button>
+        </div>
+
+        <!-- BRAND + PRICE -->
+        <div class="row g-3 align-items-center">
+            <div class="col-md-4">
+                <select name="brand" class="form-select rounded-pill">
+                    <option value="">Brand</option>
+                    <option value="TATA">TATA</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 text-start">
+                <label class="fw-semibold small">Budget (₹ in Lakhs)</label>
+                <input type="range"
+                       class="form-range"
+                       min="2" max="100"
+                       name="max_price"
+                       oninput="priceValue.innerText=this.value">
+                <small class="text-muted">
+                    Up to ₹ <span id="priceValue">100</span> Lakh
+                </small>
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100 rounded-pill">
+                    Search
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
 
-<!-- SECTION TITLE -->
-<h5 class="text-center mt-4 fw-bold">Get Offers on Popular Cars</h5>
-
-<!-- CAROUSEL -->
-<div class="carousel-container my-4">
-
-    <button class="carousel-nav left" onclick="scrollCarousel(-1)">&#8249;</button>
-
-    <div class="carousel-track" id="carCarousel">
+<!-- ================= CAR LIST ================= -->
+<div class="container pb-5">
+    <div class="row g-4" id="carList">
 
         {% for car in cars %}
-        <a href="{% url 'car_detail' car.id %}" class="text-decoration-none text-dark">
-            <div class="carousel-card">
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100 shadow-sm slide-up">
 
                 {% if car.image %}
-                    <img src="{{ car.image.url }}" alt="{{ car.name }}">
+                <img src="{{ car.image.url }}" class="card-img-top">
                 {% else %}
-                    <img src="{% static 'images/no-car.png' %}" alt="No Image">
+                <img src="{% static 'images/no-car.png' %}" class="card-img-top">
                 {% endif %}
 
-                <h6>{{ car.name }}</h6>
-                <div class="price">₹ {{ car.price }}</div>
-                <span class="link">Check On Road Price</span>
+                <div class="card-body text-center">
+                    <h6 class="card-title">{{ car.name }}</h6>
+
+                    <!-- ⭐ Rating UI -->
+                    <div class="text-warning mb-1">
+                        ★★★★☆ <small class="text-muted">(4.2)</small>
+                    </div>
+
+                    <p class="fw-bold text-primary">₹ {{ car.price }}</p>
+
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="{% url 'car_detail' car.id %}"
+                           class="btn btn-sm btn-outline-primary rounded-pill">
+                            View
+                        </a>
+
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'add_to_wishlist' car.id %}"
+                           class="btn btn-sm btn-outline-danger rounded-pill">
+                            ❤️
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
 
             </div>
-        </a>
-        {% empty %}
-        <p class="text-muted text-center w-100">
-            No cars available right now
-        </p>
+        </div>
         {% endfor %}
+    </div>
+</div>
+
+<!-- ================= FILTER MODAL ================= -->
+<div class="modal fade" id="filterModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Advanced Filters</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <label class="fw-semibold">Fuel Type</label>
+        <select class="form-select mb-3">
+            <option>Petrol</option>
+            <option>Diesel</option>
+            <option>Electric</option>
+        </select>
+
+        <label class="fw-semibold">Transmission</label>
+        <select class="form-select">
+            <option>Manual</option>
+            <option>Automatic</option>
+        </select>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-success">Apply</button>
+      </div>
 
     </div>
-
-    <button class="carousel-nav right" onclick="scrollCarousel(1)">&#8250;</button>
+  </div>
 </div>
+
+<!-- ================= LIVE SEARCH JS ================= -->
+<script>
+const input = document.getElementById("searchInput");
+const box = document.getElementById("suggestionBox");
+
+input.addEventListener("input", () => {
+    const query = input.value.trim();
+
+    if (query.length < 2) {
+        box.classList.add("d-none");
+        box.innerHTML = "";
+        return;
+    }
+
+    fetch(`/search-suggestions/?q=${query}`)
+        .then(res => res.json())
+        .then(data => {
+            box.innerHTML = "";
+            if (data.length === 0) {
+                box.classList.add("d-none");
+                return;
+            }
+            data.forEach(name => {
+                const li = document.createElement("li");
+                li.className = "list-group-item list-group-item-action";
+                li.innerText = name;
+                li.onclick = () => {
+                    input.value = name;
+                    box.classList.add("d-none");
+                };
+                box.appendChild(li);
+            });
+            box.classList.remove("d-none");
+        });
+});
+</script>
 
 {% endblock %}

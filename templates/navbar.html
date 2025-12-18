@@ -1,29 +1,30 @@
 {% load static %}
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow p-2">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
   <div class="container-fluid">
 
-    <!-- Logo -->
-    <a class="navbar-brand" href="{% url 'home' %}">
-      <img src="{% static 'images/logo.svg' %}" alt="Car Showroom Logo" width="130">
+    <!-- LOGO -->
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+      <img src="{% static 'images/logo.svg' %}" alt="Car Hub Logo" width="130">
     </a>
 
-    <!-- Toggler -->
+    <!-- TOGGLER -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarNavAltMarkup">
+            data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Navbar Content -->
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <!-- NAVBAR CONTENT -->
+    <div class="collapse navbar-collapse" id="navbarNav">
 
       <!-- LEFT MENU -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="{% url 'home' %}">Home</a>
+          <a class="nav-link fw-semibold" href="{% url 'home' %}">
+            Home
+          </a>
         </li>
 
-        <!-- Admin only -->
         {% if user.is_superuser %}
         <li class="nav-item">
           <a class="nav-link text-primary fw-semibold" href="{% url 'add_cars' %}">
@@ -39,19 +40,27 @@
       </ul>
 
       <!-- RIGHT MENU -->
-      <div class="d-flex align-items-center ms-auto gap-3">
+      <div class="d-flex align-items-center gap-3">
 
-        <!-- Search (UI only for now) -->
-        <form class="d-flex position-relative">
-          <input class="form-control ps-5 rounded-pill search-input"
-                 type="search" placeholder="Search cars...">
+        <!-- 🔍 SEARCH (CONNECTED) -->
+        <form method="get" action="{% url 'home' %}" class="position-relative">
+          <input class="form-control ps-5 rounded-pill"
+                 type="search"
+                 name="search"
+                 placeholder="Search cars...">
           <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary">
             <i class="bi bi-search"></i>
           </span>
         </form>
 
         {% if user.is_authenticated %}
-        <!-- Profile Dropdown -->
+
+        <!-- ❤️ WISHLIST -->
+        <a href="{% url 'wishlist' %}" class="btn position-relative p-0 border-0 bg-transparent">
+          <i class="bi bi-heart-fill text-danger fs-5"></i>
+        </a>
+
+        <!-- PROFILE DROPDOWN -->
         <div class="dropdown">
           <button class="btn p-0 border-0 bg-transparent dropdown-toggle"
                   type="button" data-bs-toggle="dropdown">
@@ -85,8 +94,9 @@
             </li>
           </ul>
         </div>
+
         {% else %}
-        <!-- Login / Signup -->
+        <!-- LOGIN / SIGNUP -->
         <a href="{% url 'login' %}" class="btn btn-outline-primary rounded-pill">
           Login
         </a>
@@ -99,3 +109,4 @@
     </div>
   </div>
 </nav>
+

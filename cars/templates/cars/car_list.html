@@ -1,0 +1,26 @@
+{% for car in cars %}
+<div class="col-sm-6 col-md-4 col-lg-3">
+    <div class="card h-100 shadow-sm slide-up">
+
+        {% if car.image %}
+        <img src="{{ car.image.url }}" class="card-img-top">
+        {% endif %}
+
+        <div class="card-body text-center">
+            <h6>{{ car.name }}</h6>
+
+            <!-- ⭐ Rating -->
+            <div class="text-warning small mb-1">
+                ★★★★☆ ({{ car.rating }}/5)
+            </div>
+
+            <p class="fw-bold text-primary">₹ {{ car.price }}</p>
+
+            <a href="{% url 'car_detail' car.id %}"
+               class="btn btn-sm btn-outline-primary rounded-pill">
+               View
+            </a>
+        </div>
+    </div>
+</div>
+{% endfor %}
