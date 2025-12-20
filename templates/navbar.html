@@ -1,112 +1,151 @@
 {% load static %}
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-white shadow-sm navbar-blur">
+  <div class="container-fluid px-lg-4">
 
-    <!-- LOGO -->
-    <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
-      <img src="{% static 'images/logo.svg' %}" alt="Car Hub Logo" width="130">
+    <!-- ================= BRAND ================= -->
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2"
+       href="{% url 'home' %}">
+      <img src="{% static 'images/logo.svg' %}" alt="Car Hub" width="120">
     </a>
 
     <!-- TOGGLER -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse"
             data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- NAVBAR CONTENT -->
     <div class="collapse navbar-collapse" id="navbarNav">
 
-      <!-- LEFT MENU -->
-      <ul class="navbar-nav me-auto">
+      <!-- ================= LEFT MENU ================= -->
+      <ul class="navbar-nav me-lg-4 gap-lg-3 align-items-lg-center">
         <li class="nav-item">
-          <a class="nav-link fw-semibold" href="{% url 'home' %}">
+          <a class="nav-link fw-semibold {% if request.path == '/' %}active{% endif %}"
+             href="{% url 'home' %}">
             Home
           </a>
         </li>
 
-        {% if user.is_superuser %}
         <li class="nav-item">
-          <a class="nav-link text-primary fw-semibold" href="{% url 'add_cars' %}">
-            <i class="bi bi-plus-circle"></i> Add Car
+          <a class="nav-link fw-semibold {% if 'compare' in request.path %}active{% endif %}"
+             href="{% url 'compare_cars' %}">
+            Compare
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-primary fw-semibold" href="{% url 'add_brands' %}">
-            <i class="bi bi-tags"></i> Add Brands
-          </a>
-        </li>
-        {% endif %}
       </ul>
 
-      <!-- RIGHT MENU -->
-      <div class="d-flex align-items-center gap-3">
+      <!-- ================= CENTER SEARCH ================= -->
+      <form method="get"
+            action="{% url 'home' %}"
+            class="d-flex mx-lg-auto position-relative"
+            style="max-width:360px;width:100%;">
+        <input type="search"
+               name="search"
+               value="{{ request.GET.search }}"
+               class="form-control rounded-pill ps-5"
+               placeholder="Search cars...">
+        <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+      </form>
 
-        <!-- 🔍 SEARCH (CONNECTED) -->
-        <form method="get" action="{% url 'home' %}" class="position-relative">
-          <input class="form-control ps-5 rounded-pill"
-                 type="search"
-                 name="search"
-                 placeholder="Search cars...">
-          <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary">
-            <i class="bi bi-search"></i>
-          </span>
+      <!-- ================= RIGHT SIDE ================= -->
+      <div class="d-flex align-items-center gap-2 ms-lg-4">
+
+        <!-- ⛽ FUEL FILTER -->
+        <form method="get" action="{% url 'home' %}">
+          <select name="fuel"
+                  class="form-select form-select-sm rounded-pill"
+                  onchange="this.form.submit()">
+            <option value="">Fuel</option>
+            <option value="Petrol" {% if request.GET.fuel == "Petrol" %}selected{% endif %}>Petrol</option>
+            <option value="Diesel" {% if request.GET.fuel == "Diesel" %}selected{% endif %}>Diesel</option>
+            <option value="CNG" {% if request.GET.fuel == "CNG" %}selected{% endif %}>CNG</option>
+            <option value="Electric" {% if request.GET.fuel == "Electric" %}selected{% endif %}>Electric</option>
+          </select>
+        </form>
+
+        <!-- 🔽 SORT -->
+        <form method="get" action="{% url 'home' %}">
+          <select name="sort"
+                  class="form-select form-select-sm rounded-pill"
+                  onchange="this.form.submit()">
+            <option value="">Sort</option>
+            <option value="price_low" {% if request.GET.sort == "price_low" %}selected{% endif %}>
+              Price ↑
+            </option>
+            <option value="price_high" {% if request.GET.sort == "price_high" %}selected{% endif %}>
+              Price ↓
+            </option>
+            <option value="rating" {% if request.GET.sort == "rating" %}selected{% endif %}>
+              Rating
+            </option>
+          </select>
         </form>
 
         {% if user.is_authenticated %}
 
         <!-- ❤️ WISHLIST -->
-        <a href="{% url 'wishlist' %}" class="btn position-relative p-0 border-0 bg-transparent">
-          <i class="bi bi-heart-fill text-danger fs-5"></i>
+        <a href="{% url 'wishlist' %}"
+           class="btn btn-light rounded-circle"
+           title="Wishlist">
+          <i class="bi bi-heart-fill text-danger"></i>
         </a>
 
-        <!-- PROFILE DROPDOWN -->
+        <!-- 👤 PROFILE DROPDOWN -->
         <div class="dropdown">
-          <button class="btn p-0 border-0 bg-transparent dropdown-toggle"
-                  type="button" data-bs-toggle="dropdown">
-            <img src="{% static 'images/admin4.png' %}" alt="Profile" height="28">
+          <button class="btn btn-light rounded-circle dropdown-toggle"
+                  data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle fs-5"></i>
           </button>
 
-          <ul class="dropdown-menu dropdown-menu-end shadow">
+          <ul class="dropdown-menu dropdown-menu-end shadow rounded-4 p-2">
+
             <li class="dropdown-header text-center fw-bold">
               {{ user.username }}
-              {% if user.is_superuser %}
-              <span class="badge bg-danger ms-1">Admin</span>
-              {% endif %}
             </li>
+
             <li><hr class="dropdown-divider"></li>
 
             <li>
-              <a class="dropdown-item" href="{% url 'profile' %}">
-                <i class="bi bi-person me-2"></i> Profile
+              <a class="dropdown-item d-flex align-items-center gap-2"
+                 href="{% url 'profile' %}">
+                <i class="bi bi-person"></i> Profile
               </a>
             </li>
+
             <li>
-              <a class="dropdown-item" href="{% url 'privacy_settings' %}">
-                <i class="bi bi-shield-lock me-2"></i> Privacy Settings
+              <a class="dropdown-item d-flex align-items-center gap-2"
+                 href="{% url 'privacy_settings' %}">
+                <i class="bi bi-shield-lock"></i> Privacy Settings
               </a>
             </li>
+
             <li><hr class="dropdown-divider"></li>
+
             <li>
-              <a class="dropdown-item text-danger" href="{% url 'logout' %}">
-                <i class="bi bi-box-arrow-right me-2"></i> Logout
+              <a class="dropdown-item text-danger d-flex align-items-center gap-2"
+                 href="{% url 'logout' %}">
+                <i class="bi bi-box-arrow-right"></i> Logout
               </a>
             </li>
+
           </ul>
         </div>
 
         {% else %}
-        <!-- LOGIN / SIGNUP -->
-        <a href="{% url 'login' %}" class="btn btn-outline-primary rounded-pill">
+
+        <!-- AUTH BUTTONS -->
+        <a href="{% url 'login' %}"
+           class="btn btn-outline-primary btn-sm rounded-pill">
           Login
         </a>
-        <a href="{% url 'signup' %}" class="btn btn-primary rounded-pill">
+        <a href="{% url 'signup' %}"
+           class="btn btn-primary btn-sm rounded-pill">
           Sign Up
         </a>
-        {% endif %}
 
+        {% endif %}
       </div>
     </div>
   </div>
 </nav>
-

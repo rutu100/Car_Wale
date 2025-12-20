@@ -14,6 +14,10 @@ urlpatterns = [
     path('car_detail/<int:car_id>/', views.car_detail, name='car_detail'),
     path('edit_car/<int:car_id>/', views.edit_car, name='edit_car'),
     path('delete_car/<int:car_id>/', views.delete_car, name='delete_car'),
+    
+    
+    path('compare/', views.compare_cars, name='compare_cars'),
+
 
     # ❤️ WISHLIST
     path('wishlist/', views.wishlist, name='wishlist'),

@@ -8,7 +8,7 @@
 <!-- ================= HERO + FIND CAR ================= -->
 <div class="container py-5 text-center hero-section fade-in">
 
-    <div class="hero-img-wrapper slide-down">
+    <div class="hero-img-wrapper">
         <img src="{% static 'images/homeCar.png' %}"
              class="img-fluid mb-4 hero-img">
     </div>
@@ -18,14 +18,16 @@
         Best prices • Trusted dealers • Easy buying
     </p>
 
-    <!-- ================= FILTER FORM ================= -->
+    <!-- ================= FILTER FORM (IMPORTANT) ================= -->
     <form method="get" id="filterForm"
           class="card shadow-lg p-4 mt-4 mx-auto slide-up"
           style="max-width:1000px;border-radius:22px;">
 
         <div class="d-flex justify-content-between mb-3">
             <h5 class="fw-bold mb-0">Find Your Right Car</h5>
-            <span class="text-muted"><i class="bi bi-geo-alt"></i> Pune</span>
+            <span class="text-muted">
+                <i class="bi bi-geo-alt"></i> Pune
+            </span>
         </div>
 
         <!-- 🔍 SEARCH WITH LIVE SUGGESTIONS -->
@@ -35,7 +37,8 @@
                        name="search"
                        id="searchInput"
                        class="search-input"
-                       placeholder="Type car name (Eg. Nexon, Punch)">
+                       placeholder="Type car name (Eg. Nexon, Punch)"
+                       value="{{ request.GET.search }}">
                 <i class="bi bi-search search-icon"></i>
             </div>
 
@@ -58,6 +61,7 @@
                 <i class="bi bi-gear"></i> Transmission
             </button>
 
+            <!-- OPEN MODAL -->
             <button type="button"
                     class="btn btn-outline-success filter-chip"
                     data-bs-toggle="modal"
@@ -67,11 +71,15 @@
         </div>
 
         <!-- BRAND + PRICE -->
-        <div class="row g-3 align-items-center">
+        <div class="row g-3 align-items-center mb-3">
+
             <div class="col-md-4">
                 <select name="brand" class="form-select rounded-pill">
                     <option value="">Brand</option>
-                    <option value="TATA">TATA</option>
+                    <option value="TATA"
+                        {% if request.GET.brand == "TATA" %}selected{% endif %}>
+                        TATA
+                    </option>
                 </select>
             </div>
 
@@ -81,9 +89,12 @@
                        class="form-range"
                        min="2" max="100"
                        name="max_price"
+                       value="{{ request.GET.max_price|default:100 }}"
                        oninput="priceValue.innerText=this.value">
                 <small class="text-muted">
-                    Up to ₹ <span id="priceValue">100</span> Lakh
+                    Up to ₹ <span id="priceValue">
+                        {{ request.GET.max_price|default:100 }}
+                    </span> Lakh
                 </small>
             </div>
 
@@ -93,6 +104,70 @@
                 </button>
             </div>
         </div>
+
+        <!-- ================= FILTER MODAL (MOVED INSIDE FORM ✅) ================= -->
+        <div class="modal fade" id="filterModal" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4">
+
+              <div class="modal-header">
+                <h5 class="modal-title">Advanced Filters</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"></button>
+              </div>
+
+              <div class="modal-body">
+
+                <!-- Fuel -->
+                <label class="fw-semibold">Fuel Type</label>
+                <select class="form-select mb-3" name="fuel">
+                    <option value="">Any</option>
+                    <option value="Petrol"
+                        {% if request.GET.fuel == "Petrol" %}selected{% endif %}>
+                        Petrol
+                    </option>
+                    <option value="Diesel"
+                        {% if request.GET.fuel == "Diesel" %}selected{% endif %}>
+                        Diesel
+                    </option>
+                    <option value="Electric"
+                        {% if request.GET.fuel == "Electric" %}selected{% endif %}>
+                        Electric
+                    </option>
+                </select>
+
+                <!-- Transmission -->
+                <label class="fw-semibold">Transmission</label>
+                <select class="form-select" name="transmission">
+                    <option value="">Any</option>
+                    <option value="Manual"
+                        {% if request.GET.transmission == "Manual" %}selected{% endif %}>
+                        Manual
+                    </option>
+                    <option value="Automatic"
+                        {% if request.GET.transmission == "Automatic" %}selected{% endif %}>
+                        Automatic
+                    </option>
+                </select>
+
+              </div>
+
+              <div class="modal-footer">
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Close
+                </button>
+                <!-- SUBMITS SAME FORM -->
+                <button type="submit" class="btn btn-success">
+                    Apply Filters
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
     </form>
 </div>
 
@@ -102,7 +177,7 @@
 
         {% for car in cars %}
         <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="card h-100 shadow-sm slide-up">
+            <div class="card h-100 shadow-sm">
 
                 {% if car.image %}
                 <img src="{{ car.image.url }}" class="card-img-top">
@@ -113,9 +188,8 @@
                 <div class="card-body text-center">
                     <h6 class="card-title">{{ car.name }}</h6>
 
-                    <!-- ⭐ Rating UI -->
                     <div class="text-warning mb-1">
-                        ★★★★☆ <small class="text-muted">(4.2)</small>
+                        ★ {{ car.rating }} <small class="text-muted">/ 5</small>
                     </div>
 
                     <p class="fw-bold text-primary">₹ {{ car.price }}</p>
@@ -137,42 +211,12 @@
 
             </div>
         </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted">
+            No cars found
+        </div>
         {% endfor %}
     </div>
-</div>
-
-<!-- ================= FILTER MODAL ================= -->
-<div class="modal fade" id="filterModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content rounded-4">
-
-      <div class="modal-header">
-        <h5 class="modal-title">Advanced Filters</h5>
-        <button class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        <label class="fw-semibold">Fuel Type</label>
-        <select class="form-select mb-3">
-            <option>Petrol</option>
-            <option>Diesel</option>
-            <option>Electric</option>
-        </select>
-
-        <label class="fw-semibold">Transmission</label>
-        <select class="form-select">
-            <option>Manual</option>
-            <option>Automatic</option>
-        </select>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-success">Apply</button>
-      </div>
-
-    </div>
-  </div>
 </div>
 
 <!-- ================= LIVE SEARCH JS ================= -->
@@ -213,3 +257,21 @@ input.addEventListener("input", () => {
 </script>
 
 {% endblock %}
+
+<script>
+const form = document.getElementById("filterForm");
+
+form.addEventListener("change", function () {
+    const formData = new FormData(form);
+    const params = new URLSearchParams(formData);
+
+    fetch(`/?${params}`, {
+        headers: { "X-Requested-With": "XMLHttpRequest" }
+    })
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("carList").innerHTML = html;
+    });
+});
+</script>
+

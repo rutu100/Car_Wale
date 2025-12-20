@@ -1,32 +1,65 @@
 from django.contrib import admin
-from .models import Car, Comment, Wishlist, Rating
+from .models import Car, FuelType, Wishlist, Comment, Rating
+
 
 # =========================
 # CAR ADMIN
 # =========================
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
+
+    # Show these columns in admin list
     list_display = (
         'name',
         'brand',
         'price',
+        'on_road_price',
         'quantity',
-        'fuel_type',
+        'model_year',
         'transmission',
-        'mileage',
-        'seating'
+        'fuel_list',
+        'rating',
     )
 
+    # Filters on right side
     list_filter = (
         'brand',
-        'fuel_type',
-        'transmission'
+        'body_type',
+        'transmission',
+        'model_year',
     )
 
+    # Search box
     search_fields = (
         'name',
-        'brand__name'
+        'brand__name',
+        'engine',
     )
+
+    # ManyToMany field display helper
+    def fuel_list(self, obj):
+        return ", ".join(f.name for f in obj.fuel_types.all())
+
+    fuel_list.short_description = "Fuel Types"
+
+
+# =========================
+# FUEL TYPE ADMIN
+# =========================
+@admin.register(FuelType)
+class FuelTypeAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+
+
+# =========================
+# RATING ADMIN
+# =========================
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    list_display = ('car', 'user', 'rating', 'created_at')
+    list_filter = ('rating', 'created_at')
+    search_fields = ('car__name', 'user__username')
 
 
 # =========================
@@ -34,8 +67,9 @@ class CarAdmin(admin.ModelAdmin):
 # =========================
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'car', 'created_on')
-    search_fields = ('name', 'car__name')
+    list_display = ('car', 'name', 'created_on')
+    list_filter = ('created_on',)
+    search_fields = ('car__name', 'name', 'email')
 
 
 # =========================
@@ -44,17 +78,4 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(Wishlist)
 class WishlistAdmin(admin.ModelAdmin):
     list_display = ('user', 'car', 'added_on')
-
-# =========================
-# RATING ADMIN
-
-@admin.register(Rating)
-class RatingAdmin(admin.ModelAdmin):
-    list_display = ('user', 'car', 'rating', 'created_on')
-    list_filter = ('rating', 'created_on')
-
-
-
-
-
-
+    search_fields = ('user__username', 'car__name')

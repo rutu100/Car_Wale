@@ -1,11 +1,20 @@
 from django import forms
-from .models import Car, Comment
+from .models import Car, Comment, FuelType
 
 
 # =========================
 # CAR FORM (ADMIN ADD / EDIT)
 # =========================
 class CarForm(forms.ModelForm):
+
+    # 🔥 Multiple fuel types (Petrol, CNG, Electric etc.)
+    fuel_types = forms.ModelMultipleChoiceField(
+        queryset=FuelType.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=True,
+        label="Fuel Types"
+    )
+
     class Meta:
         model = Car
         fields = [
@@ -13,11 +22,19 @@ class CarForm(forms.ModelForm):
             'name',
             'description',
             'image',
+
+            # 🔹 New specifications
+            'model_year',
+            'engine',
+            'body_type',
+
+            # 🔹 Pricing
             'price',
+            'on_road_price',
             'quantity',
 
-            # 🔹 NEW SPECIFICATIONS (ADMIN CONTROLLED)
-            'fuel_type',
+            # 🔹 Technical
+            'fuel_types',
             'transmission',
             'mileage',
             'seating',
@@ -41,19 +58,33 @@ class CarForm(forms.ModelForm):
                 'class': 'form-control'
             }),
 
+            'model_year': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Example: 2024'
+            }),
+
+            'engine': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Example: 1.2L Petrol'
+            }),
+
+            'body_type': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+
             'price': forms.NumberInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Enter price'
+                'placeholder': 'Ex-showroom price'
+            }),
+
+            'on_road_price': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'On-road price'
             }),
 
             'quantity': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'min': 0
-            }),
-
-            # 🔧 SPECIFICATIONS
-            'fuel_type': forms.Select(attrs={
-                'class': 'form-control'
             }),
 
             'transmission': forms.Select(attrs={
@@ -73,7 +104,7 @@ class CarForm(forms.ModelForm):
 
 
 # =========================
-# COMMENT FORM (UNCHANGED)
+# COMMENT FORM
 # =========================
 class CommentForm(forms.ModelForm):
     class Meta:

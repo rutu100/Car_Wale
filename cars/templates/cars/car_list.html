@@ -1,19 +1,17 @@
+{% load static %}
+
 {% for car in cars %}
 <div class="col-sm-6 col-md-4 col-lg-3">
-    <div class="card h-100 shadow-sm slide-up">
+    <div class="card h-100 shadow-sm">
 
         {% if car.image %}
         <img src="{{ car.image.url }}" class="card-img-top">
+        {% else %}
+        <img src="{% static 'images/no-car.png' %}" class="card-img-top">
         {% endif %}
 
         <div class="card-body text-center">
             <h6>{{ car.name }}</h6>
-
-            <!-- ⭐ Rating -->
-            <div class="text-warning small mb-1">
-                ★★★★☆ ({{ car.rating }}/5)
-            </div>
-
             <p class="fw-bold text-primary">₹ {{ car.price }}</p>
 
             <a href="{% url 'car_detail' car.id %}"
@@ -21,6 +19,11 @@
                View
             </a>
         </div>
+
     </div>
+</div>
+{% empty %}
+<div class="col-12 text-center">
+    <p class="text-muted">No cars found</p>
 </div>
 {% endfor %}

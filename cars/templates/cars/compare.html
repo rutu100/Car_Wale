@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Compare Cars{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+<h3 class="fw-bold text-center mb-4">🚗 Compare Cars</h3>
+
+<form method="get" class="row g-3 justify-content-center mb-4">
+
+  <div class="col-md-4">
+    <select name="car1" class="form-select">
+      <option value="">Select Car 1</option>
+      {% for car in cars %}
+      <option value="{{ car.id }}">{{ car.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-4">
+    <select name="car2" class="form-select">
+      <option value="">Select Car 2</option>
+      {% for car in cars %}
+      <option value="{{ car.id }}">{{ car.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <button class="btn btn-primary w-100">Compare</button>
+  </div>
+
+</form>
+
+{% if car1 and car2 %}
+<div class="table-responsive">
+<table class="table table-bordered text-center">
+  <tr>
+    <th>Feature</th>
+    <th>{{ car1.name }}</th>
+    <th>{{ car2.name }}</th>
+  </tr>
+  <tr>
+    <th>Price</th>
+    <td>₹ {{ car1.price }}</td>
+    <td>₹ {{ car2.price }}</td>
+  </tr>
+  <tr>
+    <th>Fuel</th>
+    <td>
+      {% for f in car1.fuel_types.all %}
+        {{ f.name }}{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </td>
+    <td>
+      {% for f in car2.fuel_types.all %}
+        {{ f.name }}{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+  <tr>
+    <th>Transmission</th>
+    <td>{{ car1.transmission }}</td>
+    <td>{{ car2.transmission }}</td>
+  </tr>
+  <tr>
+    <th>Mileage</th>
+    <td>{{ car1.mileage }}</td>
+    <td>{{ car2.mileage }}</td>
+  </tr>
+  <tr>
+    <th>Seating</th>
+    <td>{{ car1.seating }}</td>
+    <td>{{ car2.seating }}</td>
+  </tr>
+  <tr>
+    <th>Rating</th>
+    <td>⭐ {{ car1.rating }}</td>
+    <td>⭐ {{ car2.rating }}</td>
+  </tr>
+</table>
+</div>
+{% endif %}
+
+</div>
+{% endblock %}
