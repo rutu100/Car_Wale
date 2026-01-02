@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Car, FuelType, Wishlist, Comment, Rating
+from .models import Car, FuelType, Wishlist, Comment, Rating,TestDrive
+
 
 
 # =========================
@@ -79,3 +80,18 @@ class CommentAdmin(admin.ModelAdmin):
 class WishlistAdmin(admin.ModelAdmin):
     list_display = ('user', 'car', 'added_on')
     search_fields = ('user__username', 'car__name')
+  
+
+@admin.register(TestDrive)
+class TestDriveAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'phone',
+        'car',
+        'preferred_date',
+        'preferred_slot',
+        'status',
+        'created_at'
+    )
+    list_filter = ('status', 'preferred_date')
+    search_fields = ('name', 'phone', 'car__name')

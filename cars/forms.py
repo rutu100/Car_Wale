@@ -1,5 +1,6 @@
 from django import forms
-from .models import Car, Comment, FuelType
+from .models import Car, Comment, FuelType ,TestDrive
+from django.utils import timezone
 
 
 # =========================
@@ -128,3 +129,69 @@ class CommentForm(forms.ModelForm):
                 'placeholder': 'Write your comment...'
             }),
         }
+
+
+class TestDriveForm(forms.ModelForm):
+    class Meta:
+        model = TestDrive
+        fields = [
+            'name',
+            'phone',
+            'car',
+            'preferred_date',
+            'preferred_slot'
+        ]
+
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Your full name'
+            }),
+
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Mobile number'
+            }),
+
+            'car': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+
+            'preferred_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control'
+            }),
+
+            'preferred_slot': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+        }
+
+    # ✅ 1️⃣ Disable past dates (BACKEND VALIDATION)
+    def clean_preferred_date(self):
+        date = self.cleaned_data.get('preferred_date')
+        if date and date < timezone.now().date():
+            raise forms.ValidationError("Past dates are not allowed.")
+        return date
+
+    # ✅ 2️⃣ Disable already booked slots
+    def clean(self):
+        cleaned_data = super().clean()
+        car = cleaned_data.get('car')
+        date = cleaned_data.get('preferred_date')
+        slot = cleaned_data.get('preferred_slot')
+
+        if car and date and slot:
+            already_booked = TestDrive.objects.filter(
+                car=car,
+                preferred_date=date,
+                preferred_slot=slot,
+                status__in=['Pending', 'Approved']
+            ).exists()
+
+            if already_booked:
+                raise forms.ValidationError(
+                    "This time slot is already booked. Please choose another slot."
+                )
+
+        return cleaned_data

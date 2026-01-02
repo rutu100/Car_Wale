@@ -33,6 +33,13 @@
             Compare
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link fw-semibold {% if 'about' in request.path %}active{% endif %}"
+              href="{% url 'about' %}">
+              About
+        </a>
+</li>
+
       </ul>
 
       <!-- ================= CENTER SEARCH ================= -->
@@ -84,6 +91,12 @@
 
         {% if user.is_authenticated %}
 
+        <!-- 🚗 TEST DRIVE BUTTON -->
+        <a href="{% url 'test_drive' %}"
+             class="btn btn-theme btn-sm rounded-pill">
+           🚗 Test Drive
+        </a>
+
         <!-- ❤️ WISHLIST -->
         <a href="{% url 'wishlist' %}"
            class="btn btn-light rounded-circle"
@@ -97,39 +110,47 @@
                   data-bs-toggle="dropdown">
             <i class="bi bi-person-circle fs-5"></i>
           </button>
-
           <ul class="dropdown-menu dropdown-menu-end shadow rounded-4 p-2">
 
-            <li class="dropdown-header text-center fw-bold">
-              {{ user.username }}
-            </li>
+             <li class="dropdown-header text-center fw-bold">
+                  {{ user.username }}
+              </li>
 
-            <li><hr class="dropdown-divider"></li>
+              <li><hr class="dropdown-divider"></li>
 
-            <li>
+              <li>
               <a class="dropdown-item d-flex align-items-center gap-2"
-                 href="{% url 'profile' %}">
-                <i class="bi bi-person"></i> Profile
+                  href="{% url 'profile' %}">
+              <i class="bi bi-person"></i> Profile
               </a>
-            </li>
+              </li>
 
-            <li>
+  <!-- 🚗 MY TEST DRIVES (ADDED) -->
+              <li>
               <a class="dropdown-item d-flex align-items-center gap-2"
-                 href="{% url 'privacy_settings' %}">
-                <i class="bi bi-shield-lock"></i> Privacy Settings
+                href="{% url 'my_test_drives' %}">
+              <i class="bi bi-car-front"></i> My Test Drives
               </a>
-            </li>
+          </li>
 
-            <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item d-flex align-items-center gap-2"
+              href="{% url 'privacy_settings' %}">
+          <i class="bi bi-shield-lock"></i> Privacy Settings
+        </a>
+      </li>
 
-            <li>
+  <li><hr class="dropdown-divider"></li>
+
+          <li>
               <a class="dropdown-item text-danger d-flex align-items-center gap-2"
-                 href="{% url 'logout' %}">
-                <i class="bi bi-box-arrow-right"></i> Logout
+                href="{% url 'logout' %}">
+              <i class="bi bi-box-arrow-right"></i> Logout
               </a>
-            </li>
+          </li>
 
-          </ul>
+        </ul>
+
         </div>
 
         {% else %}

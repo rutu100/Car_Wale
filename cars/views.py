@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 
 from .models import Car, Wishlist, Rating
-from .forms import CarForm, CommentForm
+from .forms import CarForm, CommentForm , TestDriveForm , TestDrive
 
 
 # =====================================================
@@ -57,6 +57,15 @@ def home(request):
         return render(request, 'cars/car_list.html', context)
 
     return render(request, 'home.html', context)
+
+# =====================================================
+# ABOUT PAGE
+
+def about(request):
+    return render(request, 'about.html')
+
+
+
 
 
 # =====================================================
@@ -258,3 +267,48 @@ def delete_car(request, car_id):
     car.delete()
     messages.success(request, "Car deleted successfully!")
     return redirect('home')
+
+
+
+@login_required
+def test_drive(request):
+    form = TestDriveForm(
+    request.POST or None,
+    initial={'car': request.GET.get('car')}
+    )
+
+
+    if form.is_valid():
+        test_drive = form.save(commit=False)
+        test_drive.user = request.user
+        test_drive.save()
+        messages.success(request, "Test drive booked successfully 🚗")
+        return redirect('home')
+
+    return render(request, 'form.html', {
+        'form': form,
+        'title': 'Book Test Drive',
+        'button_text': 'Book Test Drive',
+        'button_class': 'btn-success'
+    })
+
+@login_required
+def my_test_drives(request):
+    drives = TestDrive.objects.filter(user=request.user)
+    return render(request, 'cars/my_test_drives.html', {
+        'drives': drives
+    })
+
+
+@login_required
+def cancel_test_drive(request, drive_id):
+    drive = TestDrive.objects.get(id=drive_id, user=request.user)
+
+    if drive.status == 'Pending':
+        drive.status = 'Cancelled'
+        drive.save()
+        messages.success(request, "Test drive cancelled successfully.")
+    else:
+        messages.error(request, "Only pending test drives can be cancelled.")
+
+    return redirect('my_test_drives')

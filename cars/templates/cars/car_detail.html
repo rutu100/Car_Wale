@@ -77,6 +77,11 @@
 
     </form>
     {% endif %}
+     <!-- 🚗 BOOK TEST DRIVE BUTTON (ADDED) -->
+    <a href="{% url 'test_drive' %}?car={{ car.id }}"
+       class="btn btn-outline-success">
+       🚗 Book Test Drive
+    </a>
 
     {% if in_wishlist %}
     <a href="{% url 'remove_from_wishlist' car.id %}" class="btn btn-outline-danger">
