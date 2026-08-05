@@ -6,6 +6,7 @@
 {% block content %}
 
 <!-- ================= HERO + FIND CAR ================= -->
+
 <div class="container py-5 text-center hero-section fade-in">
 
     <div class="hero-img-wrapper">
@@ -18,158 +19,6 @@
         Best prices • Trusted dealers • Easy buying
     </p>
 
-    <!-- ================= FILTER FORM (IMPORTANT) ================= -->
-    <form method="get" id="filterForm"
-          class="card shadow-lg p-4 mt-4 mx-auto slide-up"
-          style="max-width:1000px;border-radius:22px;">
-
-        <div class="d-flex justify-content-between mb-3">
-            <h5 class="fw-bold mb-0">Find Your Right Car</h5>
-            <span class="text-muted">
-                <i class="bi bi-geo-alt"></i> Pune
-            </span>
-        </div>
-
-        <!-- 🔍 SEARCH WITH LIVE SUGGESTIONS -->
-        <div class="position-relative mb-3">
-            <div class="search-box">
-                <input type="text"
-                       name="search"
-                       id="searchInput"
-                       class="search-input"
-                       placeholder="Type car name (Eg. Nexon, Punch)"
-                       value="{{ request.GET.search }}">
-                <i class="bi bi-search search-icon"></i>
-            </div>
-
-            <ul class="list-group position-absolute w-100 d-none"
-                id="suggestionBox"
-                style="z-index:1000;"></ul>
-        </div>
-
-        <!-- FILTER CHIPS -->
-        <div class="d-flex flex-wrap gap-2 mb-3">
-            <button type="button" class="btn btn-light filter-chip">
-                <i class="bi bi-cash-stack"></i> Budget
-            </button>
-
-            <button type="button" class="btn btn-light filter-chip">
-                <i class="bi bi-fuel-pump"></i> Fuel
-            </button>
-
-            <button type="button" class="btn btn-light filter-chip">
-                <i class="bi bi-gear"></i> Transmission
-            </button>
-
-            <!-- OPEN MODAL -->
-            <button type="button"
-                    class="btn btn-outline-success filter-chip"
-                    data-bs-toggle="modal"
-                    data-bs-target="#filterModal">
-                <i class="bi bi-funnel"></i> All Filters
-            </button>
-        </div>
-
-        <!-- BRAND + PRICE -->
-        <div class="row g-3 align-items-center mb-3">
-
-            <div class="col-md-4">
-                <select name="brand" class="form-select rounded-pill">
-                    <option value="">Brand</option>
-                    <option value="TATA"
-                        {% if request.GET.brand == "TATA" %}selected{% endif %}>
-                        TATA
-                    </option>
-                </select>
-            </div>
-
-            <div class="col-md-6 text-start">
-                <label class="fw-semibold small">Budget (₹ in Lakhs)</label>
-                <input type="range"
-                       class="form-range"
-                       min="2" max="100"
-                       name="max_price"
-                       value="{{ request.GET.max_price|default:100 }}"
-                       oninput="priceValue.innerText=this.value">
-                <small class="text-muted">
-                    Up to ₹ <span id="priceValue">
-                        {{ request.GET.max_price|default:100 }}
-                    </span> Lakh
-                </small>
-            </div>
-
-            <div class="col-md-2">
-                <button class="btn btn-primary w-100 rounded-pill">
-                    Search
-                </button>
-            </div>
-        </div>
-
-        <!-- ================= FILTER MODAL (MOVED INSIDE FORM ✅) ================= -->
-        <div class="modal fade" id="filterModal" tabindex="-1">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content rounded-4">
-
-              <div class="modal-header">
-                <h5 class="modal-title">Advanced Filters</h5>
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"></button>
-              </div>
-
-              <div class="modal-body">
-
-                <!-- Fuel -->
-                <label class="fw-semibold">Fuel Type</label>
-                <select class="form-select mb-3" name="fuel">
-                    <option value="">Any</option>
-                    <option value="Petrol"
-                        {% if request.GET.fuel == "Petrol" %}selected{% endif %}>
-                        Petrol
-                    </option>
-                    <option value="Diesel"
-                        {% if request.GET.fuel == "Diesel" %}selected{% endif %}>
-                        Diesel
-                    </option>
-                    <option value="Electric"
-                        {% if request.GET.fuel == "Electric" %}selected{% endif %}>
-                        Electric
-                    </option>
-                </select>
-
-                <!-- Transmission -->
-                <label class="fw-semibold">Transmission</label>
-                <select class="form-select" name="transmission">
-                    <option value="">Any</option>
-                    <option value="Manual"
-                        {% if request.GET.transmission == "Manual" %}selected{% endif %}>
-                        Manual
-                    </option>
-                    <option value="Automatic"
-                        {% if request.GET.transmission == "Automatic" %}selected{% endif %}>
-                        Automatic
-                    </option>
-                </select>
-
-              </div>
-
-              <div class="modal-footer">
-                <button class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-                    Close
-                </button>
-                <!-- SUBMITS SAME FORM -->
-                <button type="submit" class="btn btn-success">
-                    Apply Filters
-                </button>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-    </form>
-</div>
 
 <!-- ================= CAR LIST ================= -->
 <div class="container pb-5">
@@ -218,7 +67,7 @@
         {% endfor %}
     </div>
 </div>
-
+</div>
 <!-- ================= LIVE SEARCH JS ================= -->
 <script>
 const input = document.getElementById("searchInput");
@@ -234,7 +83,7 @@ input.addEventListener("input", () => {
     }
 
     fetch(`/search-suggestions/?q=${query}`)
-        .then(res => res.json())
+        .then(res => res.json())    
         .then(data => {
             box.innerHTML = "";
             if (data.length === 0) {

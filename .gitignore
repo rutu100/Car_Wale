@@ -1,0 +1,20 @@
+# Virtual environments
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# VS Code
+.vscode/
+.vs/
+
+# Database (optional)
+db.sqlite3
+
+# Media uploads (optional)
+media/
+
+# Environment variables
+.env

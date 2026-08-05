@@ -14,32 +14,32 @@ from .forms import CarForm, CommentForm , TestDriveForm , TestDrive
 def home(request):
     cars = Car.objects.all()
 
-    # 🔍 Search by car name
+    #  Search by car name
     search = request.GET.get('search')
     if search:
         cars = cars.filter(name__icontains=search)
 
-    # 💰 Max price filter
+    # Max price filter
     max_price = request.GET.get('max_price')
     if max_price:
         cars = cars.filter(price__lte=max_price)
 
-    # 🏷 Brand filter
+    # Brand filter
     brand = request.GET.get('brand')
     if brand:
         cars = cars.filter(brand__name__iexact=brand)
 
-    # ⛽ Fuel filter (ManyToMany)
+    # Fuel filter (ManyToMany)
     fuel = request.GET.get('fuel')
     if fuel:
         cars = cars.filter(fuel_types__name__iexact=fuel)
 
-    # ⚙ Transmission filter
+    # Transmission filter
     transmission = request.GET.get('transmission')
     if transmission:
         cars = cars.filter(transmission__iexact=transmission)
 
-    # 🔽 SORTING (✅ ADDED)
+    #  SORTING (ADDED)
     sort = request.GET.get('sort')
     if sort == 'price_low':
         cars = cars.order_by('price')
@@ -52,7 +52,7 @@ def home(request):
         'cars': cars
     }
 
-    # ⚡ AJAX support
+    #  AJAX support
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, 'cars/car_list.html', context)
 
@@ -63,10 +63,6 @@ def home(request):
 
 def about(request):
     return render(request, 'about.html')
-
-
-
-
 
 # =====================================================
 # LIVE SEARCH SUGGESTIONS
@@ -126,7 +122,7 @@ def car_detail(request, car_id):
 
     if request.method == 'POST':
 
-        # 🛒 Buy Now
+        # Buy Now
         if 'buy_now' in request.POST:
             if not request.user.is_authenticated:
                 return redirect('login')
@@ -139,7 +135,7 @@ def car_detail(request, car_id):
             else:
                 messages.error(request, "Car is out of stock.")
 
-        # 💬 Add Comment
+        # Add Comment
         elif 'comment' in request.POST:
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
@@ -174,7 +170,7 @@ def compare_cars(request):
 
 
 # =====================================================
-# RATE CAR ⭐
+# RATE CAR 
 # =====================================================
 @login_required
 def rate_car(request, car_id):
